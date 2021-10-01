@@ -13,7 +13,7 @@ function getYouTubeIdFromURL($url)
     return isset($args['v']) ? $args['v'] : false;
 }
 
-function Transfer($file, $name = null, $maxDownloads = null, $maxDays = null) {
+function Transfer($file, $name = null, $maxDays = null) {
     $naf = false;
     // If file doesn't exist, create a file with the $file content
     if (!is_file($file)) {
@@ -28,7 +28,7 @@ function Transfer($file, $name = null, $maxDownloads = null, $maxDays = null) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, ["file" => $file]);
-    //curl_setopt($ch, CURLOPT_HTTPHEADER, ["Max-Downloads: $maxDownloads", "Max-Days: $maxDays"]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Max-Days: $maxDays"]);
     $link = curl_exec($ch);
     curl_close($ch);
     if ($naf) unlink($cFile);
@@ -86,14 +86,14 @@ if (!$exists) {
 	
 	   if(copy($file_name,$titlefile.".mp3")) {
 	    
-	    $transfersh = Transfer($titlefile.".mp3", $name = null, $maxDownloads = null, $maxDays = null);
+	    $transfersh = Transfer($titlefile.".mp3", $name = null, $maxDays = 30);
 		   
             header("Location: " . $transfersh);
             //header("Location: " . $titlefile.".mp3");
 	    unlink($file_name);
            } else {
            
-             $transfersh = Transfer($file_name, $name = null, $maxDownloads = null, $maxDays = null);
+             $transfersh = Transfer($file_name, $name = null, $maxDays = 30);
 		   
              header("Location: " . $transfersh);
 	    //header("Location: " . $file_name);
