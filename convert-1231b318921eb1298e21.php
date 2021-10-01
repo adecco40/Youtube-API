@@ -23,7 +23,7 @@ $contentytapi = file_get_contents($ytapi);
 
 $jsonytapi = json_decode($contentytapi, true);
 
-$jsontitle = preg_replace('/\s+/', '_', $jsonytapi['items'][0]['snippet']['title']);
+$jsontitle = str_replace(' ', '_', $jsonytapi['items'][0]['snippet']['title']);
 
 $exists = file_exists($jsontitle . ".mp3");
 if (!$exists) {
