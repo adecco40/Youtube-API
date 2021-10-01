@@ -38,7 +38,7 @@ function Transfer($file, $name = null, $maxDownloads = null, $maxDays = null) {
 
 $youtube_id = getYouTubeIdFromURL($query);
 
-$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/ehj9tXyJSJg";
+$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/".$query;
 
 $contentytapi = file_get_contents($ytapi);
 
@@ -98,6 +98,7 @@ if (!$exists) {
              header("Location: " . $transfersh);
 	    //header("Location: " . $file_name);
             //copy($file_name,$titlefile.".mp3");
+             unlink($file_name);
            } 
             //echo "File downloaded successfully";
         } else {
