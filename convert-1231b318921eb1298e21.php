@@ -4,8 +4,6 @@ $_GET['query'];
 
 $query = $_GET['query'];
 
-header("Content-Type: application/json");
-
 header('Access-Control-Allow-Origin: *');
 
 function getYouTubeIdFromURL($url)
@@ -14,6 +12,29 @@ function getYouTubeIdFromURL($url)
     parse_str($url_string, $args);
     return isset($args['v']) ? $args['v'] : false;
 }
+
+function Transfer($file, $name = null, $maxDownloads = null, $maxDays = null) {
+    $naf = false;
+    // If file doesn't exist, create a file with the $file content
+    if (!is_file($file)) {
+        $naf = true;
+        $cFile = !empty($name) ? $name : "Transfer-" . rand(1111, 9999) . ".tmp";
+        file_put_contents($cFile, $file);
+        $file = $cFile;
+    }
+    $file = new CURLFile($file);
+    $ch = curl_init("https://transfer.sh/");
+    curl_setopt($ch, CURLOPT_USERAGENT, "Transfer/1.0.0");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, ["file" => $file]);
+    //curl_setopt($ch, CURLOPT_HTTPHEADER, ["Max-Downloads: $maxDownloads", "Max-Days: $maxDays"]);
+    $link = curl_exec($ch);
+    curl_close($ch);
+    if ($naf) unlink($cFile);
+    return $link;
+}
+
 
 $youtube_id = getYouTubeIdFromURL($query);
 
@@ -64,13 +85,19 @@ if (!$exists) {
            copy($file_name,$titlefile.".mp3");
 	
 	   if(copy($file_name,$titlefile.".mp3")) {
-
-            header("Location: " . $titlefile.".mp3");
+	    
+	    $transfersh = Transfer($titlefile.".mp3", $name = null, $maxDownloads = null, $maxDays = null);
+		   
+            header("Location: " . $transfersh);
+            //header("Location: " . $titlefile.".mp3");
 	    unlink($file_name);
            } else {
            
-	    header("Location: " . $file_name);
-            copy($file_name,$titlefile.".mp3");
+             $transfersh = Transfer($file_name, $name = null, $maxDownloads = null, $maxDays = null);
+		   
+             header("Location: " . $transfersh);
+	    //header("Location: " . $file_name);
+            //copy($file_name,$titlefile.".mp3");
            } 
             //echo "File downloaded successfully";
         } else {
