@@ -13,6 +13,13 @@ function getYouTubeIdFromURL($url)
     return isset($args['v']) ? $args['v'] : $url;
 }
 
+function getYouTubeIdandURL($url)
+{
+    $url_string = parse_url($url, PHP_URL_QUERY);
+    parse_str($url_string, $args);
+    return isset($args['v']) ? $url : "https://www.youtube.com/watch?v=".$url;
+}
+
 function Transfer($file, $name = null, $maxDays = null) {
     $naf = false;
     // If file doesn't exist, create a file with the $file content
@@ -38,7 +45,7 @@ function Transfer($file, $name = null, $maxDays = null) {
 
 $youtube_id = getYouTubeIdFromURL($query);
 
-$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/".$query;
+$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/".getYouTubeIdFromURL($query);
 
 $contentytapi = file_get_contents($ytapi);
 
@@ -51,7 +58,7 @@ $jsontitle = str_replace(' ', '_', preg_replace('/[^A-Za-z0-9\-]/', '_', $yttitl
 $exists = file_exists($jsontitle . ".mp3");
 if (!$exists) {
 
-    $warframe = "https://apps.chisdealhd.co.uk/apps/ytdl/convert.php?youtubelink=" . $query;
+    $warframe = "https://apps.chisdealhd.co.uk/apps/ytdl/convert.php?youtubelink=" . getYouTubeIdandURL($query);
 
     $content = file_get_contents($warframe);
 
