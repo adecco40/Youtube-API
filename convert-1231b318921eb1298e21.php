@@ -17,13 +17,15 @@ function getYouTubeIdFromURL($url)
 
 $youtube_id = getYouTubeIdFromURL($query);
 
-$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/".$youtube_id;
+$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/ehj9tXyJSJg";
 
 $contentytapi = file_get_contents($ytapi);
 
 $jsonytapi = json_decode($contentytapi, true);
 
-$jsontitle = str_replace(' ', '_', $jsonytapi['items'][0]['snippet']['title']);
+$yttitle = $jsonytapi[0]['snippet']['title'];
+
+$jsontitle = str_replace(' ', '_', preg_replace('/[^A-Za-z0-9\-]/', '_', $yttitle)). "CHISDL";
 
 $exists = file_exists($jsontitle . ".mp3");
 if (!$exists) {
