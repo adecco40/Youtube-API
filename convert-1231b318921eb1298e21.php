@@ -51,9 +51,9 @@ $contentytapi = file_get_contents($ytapi);
 
 $jsonytapi = json_decode($contentytapi, true);
 
-$yttitle = $jsonytapi['title'];
+$yttitle = $jsonytapi['youtube_id'];
 
-$jsontitle = str_replace(' ', '_', preg_replace('/[^A-Za-z0-9\-]/', '_', $yttitle)). "CHISDL";
+$jsontitle = $yttitle;
 
 $exists = file_exists($jsontitle . ".mp3");
 if (!$exists) {
