@@ -45,13 +45,13 @@ function Transfer($file, $name = null, $maxDays = null) {
 
 $youtube_id = getYouTubeIdFromURL($query);
 
-$ytapi = "https://api.chisdealhd.co.uk/v1/youtubeapi/video/".getYouTubeIdFromURL($query);
+$ytapi = "https://apps.chisdealhd.co.uk/apps/ytdl/convert.php?youtubelink=" . getYouTubeIdandURL($query);
 
 $contentytapi = file_get_contents($ytapi);
 
 $jsonytapi = json_decode($contentytapi, true);
 
-$yttitle = $jsonytapi[0]['snippet']['title'];
+$yttitle = $jsonytapi['title'];
 
 $jsontitle = str_replace(' ', '_', preg_replace('/[^A-Za-z0-9\-]/', '_', $yttitle)). "CHISDL";
 
